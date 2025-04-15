@@ -12,7 +12,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: "https://taskyb.netlify.app/",
+    origin: "https://taskyb.netlify.app",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["set-cookie"],
@@ -23,7 +23,6 @@ app.use(express.json());
 const csrfProtection = csrf({
   cookie: {
     httpOnly: false, // CSRF token must be accessible by JS
-    secure: true,
     sameSite: "None", // CSRF token must be sent in the same site
   },
 });
