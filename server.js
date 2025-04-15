@@ -42,15 +42,15 @@ app.use("/api/tasks", taskRoutes);
 // });
 
 //Apply CSRF protection to all routes except the token endpoint
-app.get("/api/csrf-token", (req, res) => {
-  try {
-    const token = req.csrfToken();
-    console.log("Generated CSRF token:", token);
-    res.json({ csrfToken: token });
-  } catch (err) {
-    console.error("Error generating CSRF token:", err);
-    res.status(500).json({ error: "Failed to generate CSRF token" });
-  }
-});
+// app.get("/api/csrf-token", (req, res) => {
+//   try {
+//     const token = req.csrfToken();
+//     console.log("Generated CSRF token:", token);
+//     res.json({ csrfToken: token });
+//   } catch (err) {
+//     console.error("Error generating CSRF token:", err);
+//     res.status(500).json({ error: "Failed to generate CSRF token" });
+//   }
+// });
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
