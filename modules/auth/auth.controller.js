@@ -36,6 +36,7 @@ exports.login = async (req, res, next) => {
     console.log("Login request received");
     const { error } = loginValidation.validate(req.body);
     if (error) {
+      console.log(error.details[0].message);
       return res.status(400).json({
         status: "fail",
         message: error.details[0].message,
@@ -43,8 +44,8 @@ exports.login = async (req, res, next) => {
     }
     const user = await authService.loginUser(req.body);
     const token = authService.generateToken(user);
-
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    console.log("Generated token:", token);
+    console.log("User ID:", user);
 
     //send jwt as httpOnly cookie
     res.cookie("jwt", token, {
@@ -58,6 +59,7 @@ exports.login = async (req, res, next) => {
       data: { user },
     });
   } catch (err) {
+    console.log("Error during login:", err.message);
     if (err.message.includes("Invalid email or password")) {
       return res.status(401).json({
         status: "fail",
