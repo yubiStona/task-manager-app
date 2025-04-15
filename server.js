@@ -12,7 +12,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: "https://celadon-unicorn-d9e364.netlify.app/",
+    origin: "https://celadon-unicorn-d9e364.netlify.app",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["set-cookie"],
