@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const bcrypt=require('bcryptjs');
 
 const createUser = async (userData) => {
   //check if there is user alreay with the same email
@@ -23,9 +24,16 @@ const getUserById = async (userId) => {
 };
 
 const updateUser = async (userId, updateData) => {
-  if (await User.findOne({ email: updateData.email })) {
-    throw new Error("User already in use");
-  }
+  if (updateData.email && 
+    await User.findOne({ email: updateData.email, _id: { $ne: userId } })) {
+  throw new Error("Email already in use");
+}
+
+// If password is being updated, hash it
+if (updateData.password) {
+  const salt = await bcrypt.genSalt(10);
+  updateData.password = await bcrypt.hash(updateData.password, salt);
+}
 
   const user = await User.findByIdAndUpdate(userId, updateData, {
     new: true,

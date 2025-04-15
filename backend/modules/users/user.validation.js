@@ -12,5 +12,6 @@ module.exports = {
     name: joi.string().min(3).max(30),
     email: joi.string().email(),
     role: joi.string().valid("user", "admin"),
+    password: joi.string().min(6).max(30),
   }),
 };

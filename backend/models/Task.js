@@ -7,7 +7,7 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
     description: {
-      title: String,
+      type: String,
       trim: true,
     },
     status: {
@@ -19,7 +19,7 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    createdBy: {
+    assignedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
