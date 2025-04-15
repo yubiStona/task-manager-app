@@ -12,7 +12,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: "https://taskyb.netlify.app",
+    origin: "http://localhost:5173/",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["set-cookie"],
