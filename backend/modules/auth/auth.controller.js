@@ -1,4 +1,5 @@
 const authService = require("./auth.service");
+const jwt = require("jsonwebtoken");
 const { loginValidation, registerValidation } = require("./auth.validation");
 
 exports.register = async (req, res, next) => {
@@ -14,7 +15,7 @@ exports.register = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       message: "User registered successfully",
-      data: { user },
+      // data: { user },
     });
   } catch (err) {
     if (err.message.includes("User already exists")) {
@@ -41,9 +42,18 @@ exports.login = async (req, res, next) => {
     }
     const user = await authService.loginUser(req.body);
     const token = authService.generateToken(user);
+
+     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    //send jwt as httpOnly cookie
+    res.cookie('jwt',token,{
+      httpOnly:true,
+      secure:false,
+      maxAge:24*60*60*1000
+    })
+
     res.status(200).json({
       status: "success",
-      token,
       data: { user },
     });
   } catch (err) {
@@ -59,3 +69,5 @@ exports.login = async (req, res, next) => {
     });
   }
 };
+
+

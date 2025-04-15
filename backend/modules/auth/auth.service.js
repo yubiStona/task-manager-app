@@ -21,12 +21,18 @@ module.exports = {
     if (!isMatch) {
       throw new Error("Invalid email or password");
     }
-    return user;
+    const sanitizedUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
+    return sanitizedUser;
   },
   generateToken(user) {
     return jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         role: user.role,
       },
       process.env.ACCESS_TOKEN_SECRET,

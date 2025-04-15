@@ -4,8 +4,8 @@ const User = require("../models/User");
 const authenticate = async (req, res, next) => {
   try {
     // Getting token
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-
+    //const token = req.header("Authorization")?.replace("Bearer ", "");
+    const token =req.cookies.jwt || req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return res.status(401).json({ message: "Authentication required" });
     }
@@ -16,10 +16,7 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
-    req.user = {
-      id: user._id,
-      role: user.role,
-    };
+    req.user = user;
     next();
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });
