@@ -9,16 +9,15 @@ const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
 
 const app = express();
-
 //middleware
 app.use(
   cors({
     origin: "https://taskyb.netlify.app/",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
-    exposedHeaders: ["set-cookie"],
   })
 );
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json());
 const csrfProtection = csrf({
