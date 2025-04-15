@@ -40,6 +40,19 @@ const csrfProtection = csrf({
   },
 });
 
+// Apply CSRF protection to all routes except the token endpoint
+app.get("/api/csrf-token", (req, res) => {
+  try {
+    const token = req.csrfToken();
+    console.log("Generated CSRF token:", token);
+    console.log("Cookies set:", res.getHeaders()["set-cookie"]);
+    res.json({ csrfToken: token });
+  } catch (err) {
+    console.error("Error generating CSRF token:", err);
+    res.status(500).json({ error: "Failed to generate CSRF token" });
+  }
+});
+
 // Custom error handler for CSRF errors
 app.use((err, req, res, next) => {
   if (err.code === "EBADCSRFTOKEN") {
@@ -57,18 +70,7 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-// Apply CSRF protection to all routes except the token endpoint
-app.get("/api/csrf-token", (req, res) => {
-  try {
-    const token = req.csrfToken();
-    console.log("Generated CSRF token:", token);
-    console.log("Cookies set:", res.getHeaders()["set-cookie"]);
-    res.json({ csrfToken: token });
-  } catch (err) {
-    console.error("Error generating CSRF token:", err);
-    res.status(500).json({ error: "Failed to generate CSRF token" });
-  }
-});
+
 
 app.use(csrfProtection);
 //mongoDB connection
