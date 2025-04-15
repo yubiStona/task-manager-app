@@ -33,6 +33,7 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
+    console.log("Login request received");
     const { error } = loginValidation.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -43,14 +44,14 @@ exports.login = async (req, res, next) => {
     const user = await authService.loginUser(req.body);
     const token = authService.generateToken(user);
 
-     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     //send jwt as httpOnly cookie
-    res.cookie('jwt',token,{
-      httpOnly:true,
-      secure:false,
-      maxAge:24*60*60*1000
-    })
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       status: "success",
@@ -69,5 +70,3 @@ exports.login = async (req, res, next) => {
     });
   }
 };
-
-
