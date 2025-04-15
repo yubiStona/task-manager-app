@@ -23,7 +23,6 @@ app.use(express.json());
 const csrfProtection = csrf({
   cookie: {
     httpOnly: false, // CSRF token must be accessible by JS
-    sameSite: "None",
     secure: true,
   },
 });
