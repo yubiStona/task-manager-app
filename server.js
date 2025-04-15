@@ -24,6 +24,7 @@ const csrfProtection = csrf({
   cookie: {
     httpOnly: false, // CSRF token must be accessible by JS
     sameSite: "none",
+    secure: true,
   },
 });
 app.use(csrfProtection);
