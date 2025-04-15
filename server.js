@@ -1,6 +1,6 @@
 const connectDB = require("./configs/db");
 const express = require("express");
-import dotenv from "dotenv";
+require("dotenv").config();
 const authRoutes = require("./modules/auth/auth.routes");
 const userRoutes = require("./modules/users/user.routes");
 const taskRoutes = require("./modules/task/task.routes");
