@@ -12,7 +12,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: ["https://taskyb.netlify.app", "http://localhost:3000"], // Allow localhost for testing
+    origin: ["https://taskyb.netlify.app", "http://localhost:5173"], // Allow localhost for testing
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["Set-Cookie"],
@@ -24,9 +24,9 @@ app.use(express.json());
 
 const csrfProtection = csrf({
   cookie: {
-    httpOnly: false, // CSRF token must be accessible by JS
+    httpOnly: false,
     sameSite: "None",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
   },
 });
 
@@ -37,7 +37,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
-// Apply CSRF protection to all routes except the token endpoint
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
+
+//Apply CSRF protection to all routes except the token endpoint
 app.get("/api/csrf-token", (req, res) => {
   try {
     const token = req.csrfToken();
