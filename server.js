@@ -22,55 +22,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json());
 
-// CSRF Protection setup
 const csrfProtection = csrf({
   cookie: {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    httpOnly: false, // CSRF token must be accessible by JS
+    sameSite: "None",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  },
-  ignoreMethods: ["GET", "HEAD", "OPTIONS"],
-  value: (req) => {
-    return (
-      req.headers["x-csrf-token"] ||
-      (req.body && req.body._csrf) ||
-      (req.query && req.query._csrf)
-    );
   },
 });
-
-// Apply CSRF protection to all routes except the token endpoint
-app.get("/api/csrf-token", (req, res) => {
-  try {
-    const token = req.csrfToken();
-    console.log("Generated CSRF token:", token);
-    console.log("Cookies set:", res.getHeaders()["set-cookie"]);
-    res.json({ csrfToken: token });
-  } catch (err) {
-    console.error("Error generating CSRF token:", err);
-    res.status(500).json({ error: "Failed to generate CSRF token" });
-  }
-});
-
-// Custom error handler for CSRF errors
-app.use((err, req, res, next) => {
-  if (err.code === "EBADCSRFTOKEN") {
-    console.error("CSRF Error:", {
-      path: req.path,
-      headers: req.headers,
-      cookies: req.cookies,
-      body: req.body,
-    });
-    return res.status(403).json({
-      error: "CSRF token validation failed",
-      message: "Form has been tampered with or session expired",
-    });
-  }
-  next(err);
-});
-
-
 
 app.use(csrfProtection);
 //mongoDB connection
@@ -78,5 +36,17 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
+
+// Apply CSRF protection to all routes except the token endpoint
+app.get("/api/csrf-token", (req, res) => {
+  try {
+    const token = req.csrfToken();
+    console.log("Generated CSRF token:", token);
+    res.json({ csrfToken: token });
+  } catch (err) {
+    console.error("Error generating CSRF token:", err);
+    res.status(500).json({ error: "Failed to generate CSRF token" });
+  }
+});
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
