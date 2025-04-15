@@ -30,16 +30,16 @@ const csrfProtection = csrf({
   },
 });
 
-app.use(csrfProtection);
+// app.use(csrfProtection);
 //mongoDB connection
 connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
-app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
+// app.get("/api/csrf-token", (req, res) => {
+//   res.json({ csrfToken: req.csrfToken() });
+// });
 
 //Apply CSRF protection to all routes except the token endpoint
 app.get("/api/csrf-token", (req, res) => {
