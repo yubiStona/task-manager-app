@@ -1,5 +1,6 @@
 const connectDB = require("./configs/db");
 const express = require("express");
+import dotenv from "dotenv";
 const authRoutes = require("./modules/auth/auth.routes");
 const userRoutes = require("./modules/users/user.routes");
 const taskRoutes = require("./modules/task/task.routes");
@@ -12,7 +13,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: "http://localhost:5173/",
+    origin: "https://taskyb.netlify.app/",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["set-cookie"],
@@ -22,8 +23,9 @@ app.use(cookieParser());
 app.use(express.json());
 const csrfProtection = csrf({
   cookie: {
-    httpOnly: false, // CSRF token must be accessible by JS
-    sameSite: "None", // CSRF token must be sent in the same site
+    httpOnly: true,
+    sameSite: "None",
+    secure: process.env.NODE_ENV === "production",
   },
 });
 app.use(csrfProtection);
