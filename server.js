@@ -12,7 +12,11 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: ["https://taskyb.netlify.app", "http://localhost:5173"], // Allow localhost for testing
+    origin: [
+      "https://taskyb.netlify.app",
+      "http://localhost:5173",
+      "https://task-frontend-git-main-yubistonas-projects.vercel.app",
+    ], // Allow localhost for testing
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["Set-Cookie"],
