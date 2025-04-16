@@ -1,3 +1,4 @@
+require("dotenv").config();
 const authService = require("./auth.service");
 const jwt = require("jsonwebtoken");
 const { loginValidation, registerValidation } = require("./auth.validation");
@@ -50,7 +51,7 @@ exports.login = async (req, res, next) => {
     //send jwt as httpOnly cookie
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
     });
