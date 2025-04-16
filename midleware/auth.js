@@ -6,6 +6,7 @@ const authenticate = async (req, res, next) => {
     // Getting token
     //const token = req.header("Authorization")?.replace("Bearer ", "");
     const token =req.cookies.jwt || req.header("Authorization")?.replace("Bearer ", "");
+    console.log(`Token: ${token}`);
     if (!token) {
       return res.status(401).json({ message: "Authentication required" });
     }

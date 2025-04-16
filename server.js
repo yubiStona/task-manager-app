@@ -45,10 +45,8 @@ app.use("/api/tasks", taskRoutes);
 app.get("/api/csrf-token", (req, res) => {
   try {
     const token = req.csrfToken();
-    console.log("Generated CSRF token:", token);
     res.json({ csrfToken: token });
   } catch (err) {
-    console.error("Error generating CSRF token:", err);
     res.status(500).json({ error: "Failed to generate CSRF token" });
   }
 });

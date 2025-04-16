@@ -51,6 +51,7 @@ exports.login = async (req, res, next) => {
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: false,
+      sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -59,7 +60,6 @@ exports.login = async (req, res, next) => {
       data: { user },
     });
   } catch (err) {
-    console.log("Error during login:", err.message);
     if (err.message.includes("Invalid email or password")) {
       return res.status(401).json({
         status: "fail",
